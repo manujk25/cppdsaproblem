@@ -263,5 +263,44 @@ int main()
     for(int i=1;i<=n;i++){
         cout<<arr[i]<<" ";
     }cout<<endl;
+
+    //maxheap
+    // priority_queue<int> pq;
+    // pq.push(4);
+    // pq.push(2);
+    // pq.push(5);
+    // pq.push(3);
+
+    // cout<<"Element at top"<<pq.top()<<endl;
+    // pq.pop();
+    // cout<<"Element at top"<<pq.top()<<endl;
+    // cout<<"Size is:"<<pq.push()<<endl;
+    // if(pq.empty()){
+    //     cout<<"pq is empty"<<endl;
+    // }
+    // else{
+    //     cout<<"pq is not empty";
+    // }
+
+    //min heap
+    // priority_queue<int, vector<int>, greater<int> > minheap;
+    // minheap.push(4);
+    // minheap.push(2);
+    // minheap.push(5);
+    // minheap.push(3);
+
+    //  cout<<"Element at top"<<minheap.top()<<endl;
+    // minheap.pop();
+    // cout<<"Element at top"<<minheap.top()<<endl;
+    // cout<<"Size is:"<<minheap.push()<<endl;
+    // if(minheap.empty()){
+    //     cout<<"minheap is empty"<<endl;
+    // }
+    // else{
+    //     cout<<"minheap is not empty";
+    // }
+
+
+
 return 0;
 }
