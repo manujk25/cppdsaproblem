@@ -1,0 +1,148 @@
+#include <iostream>
+using namespace std;
+
+class TrieNode {
+public:
+    char data;
+    TrieNode* children[26];
+    bool isTerminal;
+
+    TrieNode(char ch) {
+        data = ch;
+        for (int i = 0; i < 26; i++) {
+            children[i] = NULL;
+        }
+        isTerminal = false;
+    }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie() {
+        root = new TrieNode('\0');
+    }
+
+    void insertUtil(TrieNode* root, string word) {
+        // Base case
+        if (word.length() == 0) {
+            root->isTerminal = true;
+            return;
+        }
+
+        // Assumption: Lowercase letters only
+        int index = word[0] - 'a';
+        TrieNode* child;
+
+        // Present
+        if (root->children[index] != NULL) {
+            child = root->children[index];
+        } else {
+            // Absent
+            child = new TrieNode(word[0]);
+            root->children[index] = child;
+        }
+
+        // Recursion
+        insertUtil(child, word.substr(1));
+    }
+
+    void insertWord(string word) {
+        insertUtil(root, word);
+    }
+
+    bool searchUtil(TrieNode* root, string word) {
+        // Base case
+        if (word.length() == 0) {
+            return root->isTerminal;
+        }
+
+        // Assumption: Lowercase letters only
+        int index = word[0] - 'a';
+        TrieNode* child;
+
+        // Present
+        if (root->children[index] != NULL) {
+            child = root->children[index];
+        } else {
+            // Absent case
+            return false;
+        }
+
+        // Recursion
+        return searchUtil(child, word.substr(1));
+    }
+
+    bool searchWord(string word) {
+        return searchUtil(root, word);
+    }
+
+    bool removeUtil(TrieNode* root, string word) {
+        // Base case
+        if (word.length() == 0) {
+            if (!root->isTerminal)
+                return false;
+
+            root->isTerminal = false;
+
+            // Check if the node has any children
+            for (int i = 0; i < 26; i++) {
+                if (root->children[i] != NULL)
+                    return false;
+            }
+
+            delete root;
+            return true;
+        }
+
+        int index = word[0] - 'a';
+        TrieNode* child;
+
+        // Present
+        if (root->children[index] != NULL) {
+            child = root->children[index];
+        } else {
+            // Absent
+            return false;
+        }
+
+        // Recursion
+        bool shouldRemove = removeUtil(child, word.substr(1));
+
+        // Remove child if it should be deleted and has no children
+        if (shouldRemove) {
+            root->children[index] = NULL;
+            delete child;
+
+            // Check if the node has any other children
+            for (int i = 0; i < 26; i++) {
+                if (root->children[i] != NULL)
+                    return false;
+            }
+
+            // Delete root if it has no other children
+            delete root;
+            return true;
+        }
+
+        return false;
+    }
+
+    void removeWord(string word) {
+        removeUtil(root, word);
+    }
+};
+
+int main() {
+    Trie* t = new Trie();
+    t->insertWord("abcd");
+   cout << "Present or not: " << (t->searchWord("abcd") ? "Yes" : "No") << endl;
+
+    t->removeWord("abcde");
+   cout << "Present or not: " << (t->searchWord("abcd") ? "Yes" : "No") << endl;
+
+    delete t;  // Clean up memory
+
+    return 0;
+}
